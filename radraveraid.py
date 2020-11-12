@@ -108,10 +108,10 @@ def bringonline():
         if config["useproxy"] == True:
             for tok in tokens:
                 proxy = random.choice(proxies)
-                r = req.patch(f'https://discord.com/api/v8/users/@me/settings', headers = {'Authorization': tok}, json={status: "online"}, proxies = proxy)
+                r = req.patch(f'https://discord.com/api/v8/users/@me/settings', headers = {'Authorization': tok}, json={"status": "online"}, proxies = proxy)
         else:
             for tok in tokens:
-                r = req.patch(f'https://discord.com/api/v8/users/@me/settings', headers = {'Authorization': tok}, json={status: "online"})
+                r = req.patch(f'https://discord.com/api/v8/users/@me/settings', headers = {'Authorization': tok}, json={"status": "online"})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
