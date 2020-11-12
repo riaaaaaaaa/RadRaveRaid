@@ -1,6 +1,6 @@
 # RadRaveRaid
 A Discord Raiding Tool written in python.
-Current Version: 1.7
+  - Current Version: 1.7
 ![](https://raw.githubusercontent.com/riaaaaaaaa/RadRaveRaid/master/screenie.png)
 
 ## Requirements
