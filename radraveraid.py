@@ -77,10 +77,10 @@ def Join(invite):
         if config["useproxy"] == True:
             for tok in tokens:
                 proxy = random.choice(proxies)
-                r = req.post(f'https://discord.com/api/v8/invite/{inv}', headers = {'Authorization': tok}, proxies = proxy)
+                r = req.post(f'https://discord.com/api/v8/invites/{inv}', headers = {'Authorization': tok}, proxies = proxy)
         else:
             for tok in tokens:
-                r = req.post(f'https://discord.com/api/v8/invite/{inv}', headers = {'Authorization': tok})
+                r = req.post(f'https://discord.com/api/v8/invites/{inv}', headers = {'Authorization': tok})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
