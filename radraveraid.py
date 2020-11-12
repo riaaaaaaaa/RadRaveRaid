@@ -107,7 +107,6 @@ def Friend(target):
         tartag = target.split('#')
         name = tartag[0]
         discrim = tartag[1]
-        print(name,discrim)
         if config["useproxy"] == True:
             for tok in tokens:
                 proxy = random.choice(proxies)
