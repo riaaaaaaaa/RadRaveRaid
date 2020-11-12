@@ -41,7 +41,6 @@ def Help():
         
 {Fore.CYAN}join >> (invite) | {Fore.RESET}Joins all your tokens to the server using the specified invite.
 {Fore.CYAN}leave >> (serverid) | {Fore.RESET}Joins all your tokens to the server using the specified invite.
-{Fore.CYAN}bringonline | {Fore.RESET}Brings all your tokens online.
 {Fore.CYAN}spam  >> (channelid) (amount) (message) | {Fore.RESET}Spams the given channel any amount of times. Tokens must already be in server.
 {Fore.CYAN}friend  >> (username#discrimanator) | {Fore.RESET}Makes all your tokens send a friend request to your target.
 {Fore.CYAN}dm >> (userid) (amount) (message) | {Fore.RESET}Makes all your tokens DM the given ID.
@@ -97,21 +96,6 @@ def Leave(serverid):
         else:
             for tok in tokens:
                 r = req.delete(f'https://discord.com/api/v8/users/@me/guilds/{serverid}', headers = {'Authorization': tok})
-        print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
-    except Exception as e:
-        print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
-    Start()
-
-def bringonline():
-    try:
-        print(f"[{Fore.GREEN}+{Fore.RESET}] Bringing bots online...")
-        if config["useproxy"] == True:
-            for tok in tokens:
-                proxy = random.choice(proxies)
-                r = req.patch(f'https://discord.com/api/v8/users/@me/settings', headers = {'Authorization': tok}, json={"status": "online"}, proxies = proxy)
-        else:
-            for tok in tokens:
-                r = req.patch(f'https://discord.com/api/v8/users/@me/settings', headers = {'Authorization': tok}, json={"status": "online"})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -217,19 +201,11 @@ def Start():
         amount = command[2]
         message = command[3]
         Spam(channel,amount,message)
-    elif command[0] == 'megaspam':
-        channel = command[1]
-        amount = command[2]
-        MegaSpam(channel,amount)
     elif command[0] == 'dm':
         target = command[1]
         amount = command[2]
         message = command[3]
         DM(target,amount,message)
-    elif command[0] == 'megadm':
-        target = command[1]
-        amount = command[2]
-        MegaDM(target,amount)
     elif command[0] == 'friend':
         target = command[1]
         Friend(target)
@@ -243,8 +219,6 @@ def Start():
     elif command[0] == 'leave':
         serverid = command[1]
         Leave(serverid)
-    elif command[0] == 'bringonline':
-        bringonline()
     else:
         print(f'{Fore.YELLOW}Invalid Command, type "help" for a list of valid commands.'+Fore.RESET)
         Start()
