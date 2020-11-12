@@ -1,6 +1,6 @@
 # coding=utf8
 class INIT:
-    __version__ = 1.5
+    __version__ = 2.0
 
 import json,requests,os,time,random,ctypes,selenium
 from threading import Thread
@@ -42,11 +42,8 @@ def Help():
 {Fore.CYAN}join >> (invite) | {Fore.RESET}Joins all your tokens to the server using the specified invite.
 {Fore.CYAN}spam  >> (channelid) (amount) (message) | {Fore.RESET}Spams the given channel any amount of times. Tokens must already be in server.
 {Fore.CYAN}friend  >> (username#discrimanator) | {Fore.RESET}Makes all your tokens send a friend request to your target.
-{Fore.CYAN}react >> (channel id) (message id) (emoji)| {Fore.RESET}Makes all your tokens react. Useful for getting past verification.
 {Fore.CYAN}dm >> (userid) (amount) (message) | {Fore.RESET}Makes all your tokens DM the given ID.
-{Fore.CYAN}blockdm >> (userid) (amount) (message) | {Fore.RESET}Makes all your tokens block then DM the given ID.
 {Fore.CYAN}check-tokens | {Fore.RESET}Checks all of your tokens to see if they are valid.
-{Fore.CYAN}gen >> (amount) | {Fore.RESET}Generates a given amount of tokens using  h0nda's seldiscord module. (REQUIRES PROXIES)
 {Fore.CYAN}scrape-proxies | {Fore.RESET}Scrapes HTTP proxies from proxyscrape.com and writes them to proxies.txt.
 {Fore.CYAN}reset | {Fore.RESET}Resets the console.
 ''' + Fore.RESET)
@@ -79,10 +76,10 @@ def Join(invite):
         if config["useproxy"] == True:
             for tok in tokens:
                 proxy = random.choice(proxies)
-                r = req.post(f'https://discord.com/api/v6/invite/{inv}', headers = {'Authorization': tok}, proxies = proxy)
+                r = req.post(f'https://discord.com/api/v8/invite/{inv}', headers = {'Authorization': tok}, proxies = proxy)
         else:
             for tok in tokens:
-                r = req.post(f'https://discord.com/api/v6/invite/{inv}', headers = {'Authorization': tok})
+                r = req.post(f'https://discord.com/api/v8/invite/{inv}', headers = {'Authorization': tok})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -94,10 +91,10 @@ def React(channel,message,emoji):
         if config["useproxy"] == True:
             for tok in tokens:
                 proxy = random.choice(proxies)
-                r = req.post(f'https://discord.com/api/v6/channels/{channel}/messages/{message}/reactions/{emoji}/@me', headers = {'Authorization': tok}, proxies = proxy)
+                r = req.post(f'https://discord.com/api/v8/channels/{channel}/messages/{message}/reactions/{emoji}/@me', headers = {'Authorization': tok}, proxies = proxy)
         else:
             for tok in tokens:
-                r = req.post(f'https://discord.com/api/v6/invite/{inv}', headers = {'Authorization': tok})
+                r = req.post(f'https://discord.com/api/v8/invite/{inv}', headers = {'Authorization': tok})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -113,11 +110,11 @@ def Friend(target):
         if config["useproxy"] == True:
             for tok in tokens:
                 proxy = random.choice(proxies)
-                r = req.post(f'https://discordapp.com/api/v6/users/@me/relationships', headers = {'Authorization': tok}, json = {'username':name,'discriminator':discrim}, proxies = proxy)
+                r = req.post(f'https://discordapp.com/api/v8/users/@me/relationships', headers = {'Authorization': tok}, json = {'username':name,'discriminator':discrim}, proxies = proxy)
         else:
             for tok in tokens:
                 proxy = random.choice(proxies)
-                r = req.post(f'https://discordapp.com/api/v6/users/@me/relationships', headers = {'Authorization': tok}, json = {'username':name,'discriminator':discrim})
+                r = req.post(f'https://discordapp.com/api/v8/users/@me/relationships', headers = {'Authorization': tok}, json = {'username':name,'discriminator':discrim})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -130,43 +127,13 @@ def DM(tid,amount,message):
             for _ in range(int(amount)):
                 for tok in tokens:
                     proxy = random.choice(proxies)
-                    r = req.post(f'https://discordapp.com/api/v6/users/@me/channels', headers = {'Authorization': tok}, json = {'recipient_id':tid}, proxies = proxy).json()
-                    r2 = req.post(f"https://discordapp.com/api/v6/channels/{r['id']}/messages", headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False}, proxies = proxy)
+                    r = req.post(f'https://discordapp.com/api/v8/users/@me/channels', headers = {'Authorization': tok}, json = {'recipient_id':tid}, proxies = proxy).json()
+                    r2 = req.post(f"https://discordapp.com/api/v8/channels/{r['id']}/messages", headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False}, proxies = proxy)
         else:
             for _ in range(int(amount)):
                 for tok in tokens:
-                    r = req.post(f'https://discordapp.com/api/v6/users/@me/channels', headers = {'Authorization': tok}, json = {'recipient_id':tid}).json()
-                    r2 = req.post(f"https://discordapp.com/api/v6/channels/{r['id']}/messages", headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False})
-        print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
-    except Exception as e:
-        print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
-    Start()
-
-def BlockDM(tid,amount,message):
-    try:
-        print(f"[{Fore.GREEN}+{Fore.RESET}] Spamming...")
-        if config["useproxy"] == True:
-            proxy = random.choice(proxies)
-            name = req.get(f'https://discordapp.com/api/v6/users/{tid}', proxies = proxy).json()
-            print(name)
-            discrim = req.get(f'https://discordapp.com/api/v6/users/{tid}', proxies = proxy).json()
-            for tok in tokens:
-                r = req.post(f'https://discordapp.com/api/v6/users/@me/relationships', headers = {'Authorization': tok}, json = {'username':name,'discriminator':discrim,'type':2}, proxies = proxy)
-            for _ in range(int(amount)):
-                for tok in tokens:
-                    r = req.post(f'https://discordapp.com/api/v6/users/@me/channels', headers = {'Authorization': tok}, json = {'recipient_id':tid}, proxies = proxy).json()
-                    r2 = req.post(f"https://discordapp.com/api/v6/channels/{r['id']}/messages", headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False}, proxies = proxy)
-        else:
-            name = req.get(f'https://discordapp.com/api/v6/users/{tid}').json()
-            print(name)
-            discrim = req.get(f'https://discordapp.com/api/v6/users/{tid}').json()
-            for tok in tokens:
-                r = req.post(f'https://discordapp.com/api/v6/users/@me/relationships', headers = {'Authorization': tok}, json = {'username':name,'discriminator':discrim,'type':2})
-                print(r.status_code)
-            for _ in range(int(amount)):
-                for tok in tokens:
-                    r = req.post(f'https://discordapp.com/api/v6/users/@me/channels', headers = {'Authorization': tok}, json = {'recipient_id':tid}).json()
-                    r2 = req.post(f"https://discordapp.com/api/v6/channels/{r['id']}/messages", headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False})
+                    r = req.post(f'https://discordapp.com/api/v8/users/@me/channels', headers = {'Authorization': tok}, json = {'recipient_id':tid}).json()
+                    r2 = req.post(f"https://discordapp.com/api/v8/channels/{r['id']}/messages", headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -179,11 +146,11 @@ def Spam(channel,amount,message):
             for _ in range(int(amount)):
                 for tok in tokens:
                     proxy = random.choice(proxies)
-                    r = req.post(f'https://discordapp.com/api/v6/channels/{channel}/messages', headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False}, proxies = proxy)
+                    r = req.post(f'https://discordapp.com/api/v8/channels/{channel}/messages', headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False}, proxies = proxy)
         else:
             for _ in range(int(amount)):
                 for tok in tokens:
-                    r = req.post(f'https://discordapp.com/api/v6/channels/{channel}/messages', headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False})
+                    r = req.post(f'https://discordapp.com/api/v8/channels/{channel}/messages', headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -199,14 +166,14 @@ def Check():
         if config["useproxy"] == True:
             for tok in tokens:
                 proxy = random.choice(proxies)
-                r = req.get(f'https://discord.com/api/v6/users/@me', headers = {'authorization':tok}, proxies = proxy)
+                r = req.get(f'https://discord.com/api/v8/users/@me', headers = {'authorization':tok}, proxies = proxy)
                 if r.status_code == 200:
                     working.append(tok)
             for t in working:
                 file.write((t)+"\n")
         else:
             for tok in tokens:
-                r = req.get(f'https://discord.com/api/v6/users/@me', headers = {'authorization':tok})
+                r = req.get(f'https://discord.com/api/v8/users/@me', headers = {'authorization':tok})
                 if r.status_code == 200:
                     working.append(tok)
             for t in working:
