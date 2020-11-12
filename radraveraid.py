@@ -85,21 +85,6 @@ def Join(invite):
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
     Start()
 
-def React(channel,message,emoji):
-    try:
-        print(f"[{Fore.GREEN}+{Fore.RESET}] Reaacting...")
-        if config["useproxy"] == True:
-            for tok in tokens:
-                proxy = random.choice(proxies)
-                r = req.post(f'https://discord.com/api/v8/channels/{channel}/messages/{message}/reactions/{emoji}/@me', headers = {'Authorization': tok}, proxies = proxy)
-        else:
-            for tok in tokens:
-                r = req.post(f'https://discord.com/api/v8/invite/{inv}', headers = {'Authorization': tok})
-        print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
-    except Exception as e:
-        print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
-    Start()
-
 def Friend(target):
     try:
         print(f"[{Fore.GREEN}+{Fore.RESET}] Friending...")
