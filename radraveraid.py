@@ -1,6 +1,6 @@
 # coding=utf8
 class INIT:
-    __version__ = 2.0
+    __version__ = 1.7
 
 import json,requests,os,time,random,ctypes,selenium
 from threading import Thread
