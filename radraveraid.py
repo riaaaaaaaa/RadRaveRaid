@@ -32,7 +32,7 @@ def Setup():
                    {Fore.CYAN}Type {Fore.RESET}"help"{Fore.CYAN} for a list of commands
                    {Fore.GREEN}{counttokens}{Fore.RESET}{Fore.CYAN} tokens loaded!
                    {Fore.GREEN}{countproxies}{Fore.RESET}{Fore.CYAN} proxies loaded!
-                   {Fore.MAGENTA}Created by {Fore.RESET}ria |{Fore.CYAN} Thx to {Fore.RESET}Humble#8292{Fore.CYAN} for several fixes
+                   {Fore.MAGENTA}Created by {Fore.RESET}Fawful |{Fore.CYAN} Thx to {Fore.RESET}Humble#8292{Fore.CYAN} for several fixes
                    {Fore.MAGENTA}https://github.com/{Fore.RESET}riaaaaaaaa
 ''' + Fore.RESET)
 
