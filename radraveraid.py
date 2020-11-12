@@ -1,6 +1,6 @@
 # coding=utf8
 class INIT:
-    __version__ = 1.7
+    __version__ = 2.0
 
 import json,requests,os,time,random,ctypes,selenium
 from threading import Thread
@@ -40,6 +40,7 @@ def Help():
     print(f'''{Fore.RESET}{Fore.RED}                   -- Commands are seperated by commas --{Fore.RESET}
         
 {Fore.CYAN}join >> (invite) | {Fore.RESET}Joins all your tokens to the server using the specified invite.
+{Fore.CYAN}leave >> (serverid) | {Fore.RESET}Joins all your tokens to the server using the specified invite.
 {Fore.CYAN}spam  >> (channelid) (amount) (message) | {Fore.RESET}Spams the given channel any amount of times. Tokens must already be in server.
 {Fore.CYAN}friend  >> (username#discrimanator) | {Fore.RESET}Makes all your tokens send a friend request to your target.
 {Fore.CYAN}dm >> (userid) (amount) (message) | {Fore.RESET}Makes all your tokens DM the given ID.
@@ -77,6 +78,36 @@ def Join(invite):
             for tok in tokens:
                 proxy = random.choice(proxies)
                 r = req.post(f'https://discord.com/api/v8/invite/{inv}', headers = {'Authorization': tok}, proxies = proxy)
+        else:
+            for tok in tokens:
+                r = req.post(f'https://discord.com/api/v8/invite/{inv}', headers = {'Authorization': tok})
+        print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
+    except Exception as e:
+        print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
+    Start()
+
+def Leave(serverid):
+    try:
+        print(f"[{Fore.GREEN}+{Fore.RESET}] Leaving...")
+        if config["useproxy"] == True:
+            for tok in tokens:
+                proxy = random.choice(proxies)
+                r = req.delete(f'https://discord.com/api/v8/users/@me/guilds/{serverid}', headers = {'Authorization': tok}, proxies = proxy)
+        else:
+            for tok in tokens:
+                r = req.delete(f'https://discord.com/api/v8/users/@me/guilds/{serverid}', headers = {'Authorization': tok})
+        print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
+    except Exception as e:
+        print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
+    Start()
+
+def React(channel,message,emoji):
+    try:
+        print(f"[{Fore.GREEN}+{Fore.RESET}] Reaacting...")
+        if config["useproxy"] == True:
+            for tok in tokens:
+                proxy = random.choice(proxies)
+                r = req.post(f'https://discord.com/api/v8/channels/{channel}/messages/{message}/reactions/{emoji}/@me', headers = {'Authorization': tok}, proxies = proxy)
         else:
             for tok in tokens:
                 r = req.post(f'https://discord.com/api/v8/invite/{inv}', headers = {'Authorization': tok})
@@ -208,6 +239,9 @@ def Start():
     elif command[0] == 'join':
         invite = command[1]
         Join(invite)
+    elif command[0] == 'leave':
+        serverid = command[1]
+        Leave(serverid)
     else:
         print(f'{Fore.YELLOW}Invalid Command, type "help" for a list of valid commands.'+Fore.RESET)
         Start()
