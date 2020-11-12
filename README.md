@@ -1,5 +1,6 @@
 # RadRaveRaid
 A Discord Raiding Tool written in python.
+Current Version: 1.7
 ![](https://raw.githubusercontent.com/riaaaaaaaa/RadRaveRaid/master/screenie.png)
 
 ## Requirements
@@ -12,5 +13,5 @@ A Discord Raiding Tool written in python.
 ## To-Do
   - Add verification bypass (Captcha-bot solver and automatic emoji react) for bigger servers.
   - Token Customization (Change name and profile pictures on the fly)
-  - Add token generator
+  - Add token generator (COMING VERY SOON)
   - Add proxy checker
