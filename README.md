@@ -6,7 +6,7 @@ A Discord Raiding Tool written in python.
 
 ## Requirements
   - Python 3.8
-  - colorama, requests
+  - colorama, requests, selenium, websocket
 
 ## Config Setup
   - If 'useproxy' is set to true requests will use proxies gathered from proxies.txt
