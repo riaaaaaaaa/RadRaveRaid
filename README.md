@@ -2,7 +2,7 @@
 A Discord Raiding Tool written in python.
   - Current Version: 1.7
   
-![](https://raw.githubusercontent.com/riaaaaaaaa/RadRaveRaid/master/screeniee.png)
+![](https://raw.githubusercontent.com/riaaaaaaaa/RadRaveRaid/master/screenie.png)
 
 ## Requirements
   - Python 3.8
