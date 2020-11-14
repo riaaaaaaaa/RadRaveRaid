@@ -10,6 +10,7 @@ A Discord Raiding Tool written in python.
 
 ## Config Setup
   - If 'useproxy' is set to true requests will use proxies gathered from proxies.txt
+  - threadcap is the max amount of workers assigned to a threadpool
 
 ## To-Do
   - Add verification bypass (Captcha-bot solver and automatic emoji react) for bigger servers.
