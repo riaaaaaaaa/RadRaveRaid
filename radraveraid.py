@@ -39,12 +39,12 @@ def Setup():
 def Help():
     print(f'''{Fore.RESET}{Fore.RED}                       -- Commands are seperated by commas --{Fore.RESET}
         
-{Fore.CYAN}join >> (invite) | {Fore.RESET}Joins all your tokens to the server using the specified invite.
-{Fore.CYAN}leave >> (serverid) | {Fore.RESET}Joins all your tokens to the server using the specified invite.
+{Fore.CYAN}join  | {Fore.RESET}Joins all your tokens to the server using the specified invite.
+{Fore.CYAN}leave | {Fore.RESET}Joins all your tokens to the server using the specified invite.
 {Fore.CYAN}bringonline | {Fore.RESET}Brings all of your tokens online {Fore.RED}*
-{Fore.CYAN}spam  >> (channelid) (amount) (message) | {Fore.RESET}Spams the given channel any amount of times. Tokens must already be in server.
-{Fore.CYAN}friend  >> (username#discrimanator) | {Fore.RESET}Makes all your tokens send a friend request to your target. {Fore.RED}*
-{Fore.CYAN}dm >> (userid) (amount) (message) | {Fore.RESET}Makes all your tokens DM the given ID. {Fore.RED}*
+{Fore.CYAN}spam  | {Fore.RESET}Spams the given channel any amount of times. Tokens must already be in server.
+{Fore.CYAN}friend | {Fore.RESET}Makes all your tokens send a friend request to your target. {Fore.RED}*
+{Fore.CYAN}dm  | {Fore.RESET}Makes all your tokens DM the given ID. {Fore.RED}*
 {Fore.CYAN}check-tokens | {Fore.RESET}Checks all of your tokens to see if they are valid.
 {Fore.CYAN}scrape-proxies | {Fore.RESET}Scrapes HTTP proxies from proxyscrape.com and writes them to proxies.txt.
 {Fore.CYAN}reset | {Fore.RESET}Resets the console.
@@ -233,7 +233,7 @@ def BringOnline():
     Start()
 
 def Clear():
-    os.system('clear')
+    os.system('cls')
 
 def Start():
     command = list(input('').split(','))
@@ -246,7 +246,7 @@ def Start():
     elif command[0] == 'spam':
         channel = input("channel id:")
         amount =  input("amount of messages:")
-        message = input("message you  want to spam")
+        message = input("message you  want to spam:")
         Spam(channel,amount,message)
     elif command[0] == 'dm':
         target = input("user id")
