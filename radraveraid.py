@@ -1,8 +1,9 @@
 # coding=utf8
 class INIT:
     __version__ = 1.8
-
-import json,ctypes,requests,os,time,random,websocket,sys
+import os
+os.system("pip install git+https://github.com/Merubokkusu/Discord-S.C.U.M.git#egg=discum")
+import json,ctypes,requests,time,random,websocket,sys,discum
 from concurrent.futures import ThreadPoolExecutor
 from colorama import Fore
 req = requests.Session()
@@ -14,7 +15,6 @@ config = configdata["BotConfig"]
 tokens = open('tokens.txt','r').read().splitlines()
 proxies = open('proxies.txt','r').read().splitlines()
 proxies = [{'https':'http://'+proxy} for proxy in proxies]
-
 executor = ThreadPoolExecutor(max_workers=config["threadcap"])
 
 def Setup():
@@ -79,8 +79,9 @@ def Join(invite):
         inv = invite.replace("https://discord.gg/","")
         if config["useproxy"] == True:
             for tok in tokens:
+                bot = discum.Client(token=tok)
                 proxy = random.choice(proxies)
-                r = req.post(f'https://discord.com/api/v9/invites/{inv}', headers = {'Authorization': tok}, proxies = proxy)
+                r = bot.joinGuild(inv)
         else:
             for tok in tokens:
                 r = req.post(f'https://discord.com/api/v9/invites/{inv}', headers = {'Authorization': tok})
