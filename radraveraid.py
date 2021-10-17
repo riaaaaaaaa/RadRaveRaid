@@ -1,8 +1,9 @@
 # coding=utf8
 class INIT:
     __version__ = 1.8
-
-import json,requests,os,time,random,ctypes,selenium,websocket,sys
+import os
+os.system("pip install git+https://github.com/Merubokkusu/Discord-S.C.U.M.git#egg=discum")
+import json,ctypes,requests,time,random,websocket,sys,discum
 from concurrent.futures import ThreadPoolExecutor
 from colorama import Fore
 req = requests.Session()
@@ -14,11 +15,9 @@ config = configdata["BotConfig"]
 tokens = open('tokens.txt','r').read().splitlines()
 proxies = open('proxies.txt','r').read().splitlines()
 proxies = [{'https':'http://'+proxy} for proxy in proxies]
-
 executor = ThreadPoolExecutor(max_workers=config["threadcap"])
 
 def Setup():
-    ctypes.windll.kernel32.SetConsoleTitleW(f'[RadRaveRaid v{INIT.__version__}] | By Fawful')
     counttokens = len(open('tokens.txt').readlines())
     countproxies = len(open('proxies.txt').readlines())
 
@@ -27,7 +26,7 @@ def Setup():
                 {Fore.MAGENTA}  / /_/ / __ `/ __  / {Fore.RESET}{Fore.CYAN} / /_/ / __ `/ | / / _ \{Fore.RESET}{Fore.RED}   / /_/ / __ `/ / __  / {Fore.RESET}
                 {Fore.MAGENTA} / _, _/ /_/ / /_/ /  {Fore.RESET}{Fore.CYAN}/ _, _/ /_/ /| |/ /  __/{Fore.RESET}{Fore.RED}  / _, _/ /_/ / / /_/ /  {Fore.RESET}
                 {Fore.MAGENTA}/_/ |_|\__,_/\__,_/  {Fore.RESET}{Fore.CYAN}/_/ |_|\__,_/ |___/\___/ {Fore.RESET}{Fore.RED} /_/ |_|\__,_/_/\__,_/   {Fore.RESET}
-
+	
 
                        {Fore.CYAN}RadRaveRaid {INIT.__version__} {Fore.RESET}| Because fuck you
                        {Fore.CYAN}Type {Fore.RESET}"help"{Fore.CYAN} for a list of commands
@@ -40,12 +39,12 @@ def Setup():
 def Help():
     print(f'''{Fore.RESET}{Fore.RED}                       -- Commands are seperated by commas --{Fore.RESET}
         
-{Fore.CYAN}join >> (invite) | {Fore.RESET}Joins all your tokens to the server using the specified invite.
-{Fore.CYAN}leave >> (serverid) | {Fore.RESET}Joins all your tokens to the server using the specified invite.
+{Fore.CYAN}join  | {Fore.RESET}Joins all your tokens to the server using the specified invite.
+{Fore.CYAN}leave | {Fore.RESET}Joins all your tokens to the server using the specified invite.
 {Fore.CYAN}bringonline | {Fore.RESET}Brings all of your tokens online {Fore.RED}*
-{Fore.CYAN}spam  >> (channelid) (amount) (message) | {Fore.RESET}Spams the given channel any amount of times. Tokens must already be in server.
-{Fore.CYAN}friend  >> (username#discrimanator) | {Fore.RESET}Makes all your tokens send a friend request to your target. {Fore.RED}*
-{Fore.CYAN}dm >> (userid) (amount) (message) | {Fore.RESET}Makes all your tokens DM the given ID. {Fore.RED}*
+{Fore.CYAN}spam  | {Fore.RESET}Spams the given channel any amount of times. Tokens must already be in server.
+{Fore.CYAN}friend | {Fore.RESET}Makes all your tokens send a friend request to your target. {Fore.RED}*
+{Fore.CYAN}dm  | {Fore.RESET}Makes all your tokens DM the given ID. {Fore.RED}*
 {Fore.CYAN}check-tokens | {Fore.RESET}Checks all of your tokens to see if they are valid.
 {Fore.CYAN}scrape-proxies | {Fore.RESET}Scrapes HTTP proxies from proxyscrape.com and writes them to proxies.txt.
 {Fore.CYAN}reset | {Fore.RESET}Resets the console.
@@ -80,11 +79,12 @@ def Join(invite):
         inv = invite.replace("https://discord.gg/","")
         if config["useproxy"] == True:
             for tok in tokens:
+                bot = discum.Client(token=tok)
                 proxy = random.choice(proxies)
-                r = req.post(f'https://discord.com/api/v8/invites/{inv}', headers = {'Authorization': tok}, proxies = proxy)
+                r = bot.joinGuild(inv)
         else:
             for tok in tokens:
-                r = req.post(f'https://discord.com/api/v8/invites/{inv}', headers = {'Authorization': tok})
+                r = req.post(f'https://discord.com/api/v9/invites/{inv}', headers = {'Authorization': tok})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -96,10 +96,10 @@ def Leave(serverid):
         if config["useproxy"] == True:
             for tok in tokens:
                 proxy = random.choice(proxies)
-                r = req.delete(f'https://discord.com/api/v8/users/@me/guilds/{serverid}', headers = {'Authorization': tok}, proxies = proxy)
+                r = req.delete(f'https://discord.com/api/v9/users/@me/guilds/{serverid}', headers = {'Authorization': tok}, proxies = proxy)
         else:
             for tok in tokens:
-                r = req.delete(f'https://discord.com/api/v8/users/@me/guilds/{serverid}', headers = {'Authorization': tok})
+                r = req.delete(f'https://discord.com/api/v9/users/@me/guilds/{serverid}', headers = {'Authorization': tok})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -114,11 +114,11 @@ def Friend(target):
         if config["useproxy"] == True:
             for tok in tokens:
                 proxy = random.choice(proxies)
-                r = req.post(f'https://discordapp.com/api/v8/users/@me/relationships', headers = {'Authorization': tok}, json = {'username':name,'discriminator':discrim}, proxies = proxy)
+                r = req.post(f'https://discordapp.com/api/v9/users/@me/relationships', headers = {'Authorization': tok}, json = {'username':name,'discriminator':discrim}, proxies = proxy)
         else:
             for tok in tokens:
                 proxy = random.choice(proxies)
-                r = req.post(f'https://discordapp.com/api/v8/users/@me/relationships', headers = {'Authorization': tok}, json = {'username':name,'discriminator':discrim})
+                r = req.post(f'https://discordapp.com/api/v9/users/@me/relationships', headers = {'Authorization': tok}, json = {'username':name,'discriminator':discrim})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -131,13 +131,13 @@ def DM(tid,amount,message):
             for _ in range(int(amount)):
                 for tok in tokens:
                     proxy = random.choice(proxies)
-                    r = req.post(f'https://discordapp.com/api/v8/users/@me/channels', headers = {'Authorization': tok}, json = {'recipient_id':tid}, proxies = proxy).json()
-                    r2 = req.post(f"https://discordapp.com/api/v8/channels/{r['id']}/messages", headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False}, proxies = proxy)
+                    r = req.post(f'https://discordapp.com/api/v9/users/@me/channels', headers = {'Authorization': tok}, json = {'recipient_id':tid}, proxies = proxy).json()
+                    r2 = req.post(f"https://discordapp.com/api/v9/channels/{r['id']}/messages", headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False}, proxies = proxy)
         else:
             for _ in range(int(amount)):
                 for tok in tokens:
-                    r = req.post(f'https://discordapp.com/api/v8/users/@me/channels', headers = {'Authorization': tok}, json = {'recipient_id':tid}).json()
-                    r2 = req.post(f"https://discordapp.com/api/v8/channels/{r['id']}/messages", headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False})
+                    r = req.post(f'https://discordapp.com/api/v9/users/@me/channels', headers = {'Authorization': tok}, json = {'recipient_id':tid}).json()
+                    r2 = req.post(f"https://discordapp.com/api/v9/channels/{r['id']}/messages", headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -150,11 +150,11 @@ def Spam(channel,amount,message):
             for _ in range(int(amount)):
                 for tok in tokens:
                     proxy = random.choice(proxies)
-                    r = req.post(f'https://discordapp.com/api/v8/channels/{channel}/messages', headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False}, proxies = proxy)
+                    r = req.post(f'https://discordapp.com/api/v9/channels/{channel}/messages', headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False}, proxies = proxy)
         else:
             for _ in range(int(amount)):
                 for tok in tokens:
-                    r = req.post(f'https://discordapp.com/api/v8/channels/{channel}/messages', headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False})
+                    r = req.post(f'https://discordapp.com/api/v9/channels/{channel}/messages', headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False})
         print(f"[{Fore.GREEN}+{Fore.RESET}] Finished!")
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -170,14 +170,14 @@ def Check():
         if config["useproxy"] == True:
             for tok in tokens:
                 proxy = random.choice(proxies)
-                r = req.get(f'https://discord.com/api/v8/users/@me', headers = {'authorization':tok}, proxies = proxy)
+                r = req.get(f'https://discord.com/api/v9/users/@me', headers = {'authorization':tok}, proxies = proxy)
                 if r.status_code == 200:
                     working.append(tok)
             for t in working:
                 file.write((t)+"\n")
         else:
             for tok in tokens:
-                r = req.get(f'https://discord.com/api/v8/users/@me', headers = {'authorization':tok})
+                r = req.get(f'https://discord.com/api/v9/users/@me', headers = {'authorization':tok})
                 if r.status_code == 200:
                     working.append(tok)
             for t in working:
@@ -245,29 +245,29 @@ def Start():
     elif command[0] == 'check-tokens':
         Check()
     elif command[0] == 'spam':
-        channel = command[1]
-        amount = command[2]
-        message = command[3]
+        channel = input("channel id:")
+        amount =  input("amount of messages:")
+        message = input("message you  want to spam:")
         Spam(channel,amount,message)
     elif command[0] == 'dm':
-        target = command[1]
-        amount = command[2]
-        message = command[3]
+        target = input("user id")
+        amount = input("amount of messages")
+        message =input("message")
         DM(target,amount,message)
     elif command[0] == 'friend':
-        target = command[1]
+        target = input("target:")
         Friend(target)
     elif command[0] == 'reset':
         Clear()
         Setup()
         Start()
     elif command[0] == 'join':
-        invite = command[1]
+        invite = input("invite:")
         Join(invite)
     elif command[0] == 'bringonline':
         BringOnline()
     elif command[0] == 'leave':
-        serverid = command[1]
+        serverid = input("serverid")
         Leave(serverid)
     else:
         print(f'{Fore.YELLOW}Invalid Command, type "help" for a list of valid commands.'+Fore.RESET)
